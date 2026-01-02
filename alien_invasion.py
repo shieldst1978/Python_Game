@@ -3,6 +3,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 class AlienInvasion:
     """Overall class to manage game assets and behaviour"""
@@ -11,7 +12,7 @@ class AlienInvasion:
         """Initialise the game, and create game resources"""
         pygame.init()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((0,0))
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         self.clock = pygame.time.Clock()
@@ -19,6 +20,8 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
+        self.aliens = pygame.sprite.Group()
+        self._create_fleet()
         # Set background colour
         
     def run_game(self):
@@ -28,7 +31,7 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             # debug for deleting bullets
-            print (len(self.bullets))
+            # print (len(self.bullets))
             self._update_screen()                    
             self.clock.tick(60)
 
@@ -60,6 +63,12 @@ class AlienInvasion:
             elif event.key == pygame.K_LEFT:
                 self.ship.moving_left = False
 
+    def _create_fleet(self):
+         """create the fleet of aliens"""
+         # Make an Alien
+         alien = Alien(self)
+         self.aliens.add(alien)
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group"""
         if len(self.bullets) < self.settings.bullets_allowed:
@@ -79,6 +88,7 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
              bullet.draw_bullet()
         self.ship.blitme()
+        self.aliens.draw(self.screen)
         pygame.display.flip()
          
 
