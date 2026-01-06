@@ -4,7 +4,7 @@ from pygame.sprite import Sprite
 class Ship(Sprite):
     """A class to manage the space ship"""
 
-    def __init__(self):
+    def __init__(self, ai_game):
         """initialise the ship and set its starting position"""
         super(Ship, self).__init__()
         self.screen = ai_game.screen
